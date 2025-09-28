@@ -1008,7 +1008,7 @@
                 </div>
                 <div class="copyright">
                     <p>&copy; 2025 TravalIndiaGift Center Gurugaram. सर्वाधिकार सुरक्षित।</p>
-<p>GitHub Repository: <a href="https://github.com/DeepakSingh86/Travalindia.github.io" style="color: #6a11cb;">https://github.com/DeepakSingh86/Travalindia.github.io</a></p>
+<!-- <p>GitHub Repository: <a href="https://github.com/DeepakSingh86/Travalindia.github.io" style="color: #6a11cb;">https://github.com/DeepakSingh86/Travalindia.github.io</a></p> -->
             </div>
 </div>
 </footer>
@@ -1060,8 +1060,8 @@
 <p>आपके GitHub repository में images/ folder में उत्पाद images और CSV files हैं।</p>
 <p>CSV फ़ाइल में image URLs इस फॉर्मेट में हों:</p>
 <ul>
-<li><strong>पूर्ण GitHub URL:</strong> https://raw.githubusercontent.com/DeepakSingh86/Travalindia.github.io/main/images/earrings1.jpg</li>
-<li><strong>रिलेटिव पाथ:</strong> earrings1.jpg (सिर्फ फ़ाइल नाम)</li>
+<li><strong>पूर्ण GitHub URL:</strong> https://raw.githubusercontent.com/DeepakSingh86/Travalindia.github.io/main/images/images14.jpg</li>
+<li><strong>रिलेटिव पाथ:</strong> images14.jpg (सिर्फ फ़ाइल नाम)</li>
 </ul>
 </div>
 
@@ -1080,8 +1080,8 @@
 <p><strong>productId, productName, quantity, price, imageUrl1, imageUrl2, imageUrl3</strong></p>
 <p>उदाहरण:</p>
 <pre>
-P001,सुंदर झुमके साइज-1,50,599.99,earrings1.jpg,earrings2.jpg,earrings3.jpg
-P002,सुंदर झुमके साइज-2,30,149.50,https://raw.githubusercontent.com/DeepakSingh86/Travalindia.github.io/main/images/earrings4.jpg,earrings5.jpg,earrings6.jpg
+<!-- P001,सुंदर झुमके साइज-1,50,599.99,earrings1.jpg,earrings2.jpg,earrings3.jpg -->
+<!-- P002,सुंदर झुमके साइज-2,30,149.50,https://raw.githubusercontent.com/DeepakSingh86/Travalindia.github.io/main/images/earrings4.jpg,earrings5.jpg,earrings6.jpg -->
 </pre>
 </div>
 
@@ -1115,11 +1115,11 @@ P002,सुंदर झुमके साइज-2,30,149.50,https://raw.github
 <div class="form-group">
 <label>Image URLs (GitHub से)</label>
 <div class="image-url-inputs">
-<input type="text" id="imageUrl1" class="form-control" placeholder="Image 1 URL (earrings1.jpg या पूर्ण URL)">
-<input type="text" id="imageUrl2" class="form-control" placeholder="Image 2 URL">
-<input type="text" id="imageUrl3" class="form-control" placeholder="Image 3 URL">
+<input type="text" id="imageUrl4" class="form-control" placeholder="Image 1 URL (image14.jpg या पूर्ण URL)">
+<input type="text" id="imageUrl5" class="form-control" placeholder="Image 2 URL">
+<input type="text" id="imageUrl6" class="form-control" placeholder="Image 3 URL">
 </div>
-<small>आप रिलेटिव पाथ (जैसे earrings1.jpg) या पूर्ण GitHub URL डाल सकते हैं</small>
+<small>आप रिलेटिव पाथ (जैसे image14.jpg) या पूर्ण GitHub URL डाल सकते हैं</small>
 </div>
 <button class="btn btn-primary btn-block" id="addItemBtn">उत्पाद जोड़ें</button>
                 </div>
@@ -1155,10 +1155,6 @@ P002,सुंदर झुमके साइज-2,30,149.50,https://raw.github
 <script>
 document.addEventListener('DOMContentLoaded', async function() {
 
-
-
-
-
 // Admin password
 const ADMIN_PASSWORD = "admin123";
 
@@ -1166,7 +1162,7 @@ const ADMIN_PASSWORD = "admin123";
 const GITHUB_REPO = "DeepakSingh86/Travalindia.github.io";
 const GITHUB_BRANCH = "main";
 const GITHUB_IMAGE_FOLDER = "images";
-const GITHUB_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_IMAGE_FOLDER}/`;
+const GITHUB_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_IMAGE_FOLDER}/${csvFileName}`;
 
 // Initialize products array
 let products = JSON.parse(localStorage.getItem('urvashiProducts')) || [];
@@ -1187,7 +1183,8 @@ localStorage.setItem('urvashiProducts', JSON.stringify(products));
 // Function to convert image URL to GitHub raw URL
 function convertToGitHubUrl(url) {
 if (!url) return '';
-
+ return `https://raw.githubusercontent.com/DeepakSingh86/Travalindia.github.io/main/images/${fileName}`;
+}
 // If it's already a full URL, return as is
 if (url.startsWith('http')) {
 // Convert blob URL to raw URL if needed
@@ -1203,7 +1200,7 @@ return GITHUB_BASE_URL + url;
 
 // Function to load sample CSV from GitHub
 async function loadCSVFromGitHub(csvFileName) {
-const csvUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_IMAGE_FOLDER}/${csvFileName}`;
+const csvUrl = "https://raw.githubusercontent.com/DeepakSingh86/Travalindia.github.io/main/images/sample-products.csv";
 
 try {
 const response = await fetch(csvUrl);
@@ -1957,3 +1954,4 @@ renderCart();
 </script>
 </body>
 </html>
+
