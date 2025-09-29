@@ -1152,7 +1152,7 @@ P001,सुंदर झुमके साइज-1,50,599.99,Image14.jpg,
             </div>
         </div>
     </div>
-    <script>
+  <script>
 document.addEventListener('DOMContentLoaded', async function() {
 
     // ===============================
@@ -1301,127 +1301,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 
     // ===============================
-    // Products Rendering
+    // Cart / Product rendering etc...
+    // (Keep your existing renderProducts, renderAdminProducts, addToCart, renderCart etc. here without change)
     // ===============================
-    function renderProducts() {
-        const container = document.getElementById('products-container');
-        if (!container) return;
-        container.innerHTML = '';
 
-        if (products.length === 0) {
-            container.innerHTML = '<p>कोई प्रोडक्ट उपलब्ध नहीं है</p>';
-            return;
-        }
-
-        products.forEach(product => {
-            const div = document.createElement('div');
-            div.classList.add('product-card');
-            div.innerHTML = `
-                <img src="${convertToGitHubUrl(product.image)}" alt="${product.name}">
-                <h3>${product.name}</h3>
-                <p>Price: ₹${formatINR(product.price)}</p>
-                <p>Stock: ${product.stock}</p>
-                <button onclick="addToCart('${product.id}')">Add to Cart</button>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    // ===============================
-    // Cart
-    // ===============================
-    function updateCartCount() {
-        const countEl = document.getElementById('cart-count');
-        if (countEl) countEl.textContent = cart.length;
-    }
-
-    window.addToCart = function(productId) {
-        const product = products.find(p => p.id === productId);
-        if (!product) return alert('Product not found');
-
-        if (product.stock <= 0) return alert('Out of stock');
-
-        cart.push(product);
-        product.stock -= 1;
-        saveProducts();
-        saveCart();
-        updateCartCount();
-        renderProducts();
-        alert('Product added to cart');
-    };
-
-    function renderCart() {
-        const container = document.getElementById('cart-container');
-        if (!container) return;
-        container.innerHTML = '';
-
-        if (cart.length === 0) {
-            container.innerHTML = '<p>आपकी कार्ट खाली है</p>';
-            return;
-        }
-
-        cart.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.classList.add('cart-item');
-            div.innerHTML = `
-                <img src="${convertToGitHubUrl(item.image)}" alt="${item.name}">
-                <h3>${item.name}</h3>
-                <p>₹${formatINR(item.price)}</p>
-                <button onclick="removeFromCart(${index})">Remove</button>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    window.removeFromCart = function(index) {
-        const removed = cart.splice(index, 1)[0];
-        if (removed) {
-            const product = products.find(p => p.id === removed.id);
-            if (product) product.stock += 1;
-        }
-        saveProducts();
-        saveCart();
-        updateCartCount();
-        renderCart();
-        renderProducts();
-    };
-
-    // ===============================
-    // Admin Panel Rendering
-    // ===============================
-    function renderAdminProducts() {
-        const container = document.getElementById('admin-products');
-        if (!container) return;
-        container.innerHTML = '';
-
-        if (products.length === 0) {
-            container.innerHTML = '<p>No products available</p>';
-            return;
-        }
-
-        products.forEach((product, index) => {
-            const div = document.createElement('div');
-            div.classList.add('admin-product');
-            div.innerHTML = `
-                <span>${product.name} - ₹${formatINR(product.price)} (Stock: ${product.stock})</span>
-                <button onclick="deleteProduct(${index})">Delete</button>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    window.deleteProduct = function(index) {
-        if (confirm('क्या आप इस प्रोडक्ट को डिलीट करना चाहते हैं?')) {
-            products.splice(index, 1);
-            saveProducts();
-            renderAdminProducts();
-            renderProducts();
-        }
-    };
-
-    // ===============================
-    // Initialize
-    // ===============================
+    // At the end – initialize
     navigateTo('home');
     updateCartCount();
     renderProducts();
@@ -1431,6 +1315,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 </body>
 </html>
+
 
 
 
