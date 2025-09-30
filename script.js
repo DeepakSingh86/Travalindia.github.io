@@ -192,36 +192,76 @@ navLinks.forEach(l => {
     // ==========================
     // PRODUCT RENDERING
     // ==========================
-    function createProductCard(p){
-        const card = document.createElement('div');
-        card.className='product-card';
-        const imgSrc = (p.images && p.images.length>0)?p.images[0]:'https://via.placeholder.com/200x200?text=No+Image';
-        card.innerHTML=`
-            <div class="product-image"><img src="${imgSrc}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'"></div>
-            <div class="product-info">
-                <h3 class="product-title">${p.name}</h3>
-                <div class="product-price">₹ <span>${formatINR(p.price)}</span></div>
-                <div class="product-actions">
-                    <div class="quantity-control">
-                        <button class="qty-btn minus">-</button>
-                        <input type="text" class="qty-input" value="1" readonly>
-                        <button class="qty-btn plus">+</button>
+    function createProductCard(product) {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+
+                const productImage = product.images && product.images.length > 0 ?
+                    product.images[0] :
+                    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiNjY2MiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4=';
+
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <img src="${productImage}" alt="${product.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiNjY2MiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBFcnJvcjwvdGV4dD48L3N2Zz4='">
                     </div>
-                    <button class="add-to-cart" data-id="${p.id}">कार्ट में जोड़ें</button>
-                </div>
-            </div>
-        `;
-        const plus = card.querySelector('.plus');
-        const minus = card.querySelector('.minus');
-        const qty = card.querySelector('.qty-input');
-        plus.addEventListener('click',()=>qty.value=parseInt(qty.value)+1);
-        minus.addEventListener('click',()=>{if(parseInt(qty.value)>1) qty.value=parseInt(qty.value)-1;});
-        card.querySelector('.add-to-cart').addEventListener('click',()=>{
-            addToCart(p.id,parseInt(qty.value));
-            showTemporaryMessage('कार्ट में जोड़ा गया!');
-        });
-        return card;
-    }
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-price">₹ <span class="inr-symbol">${formatINR(product.price)}</span></div>
+                        <div class="product-actions">
+                            <div class="quantity-control">
+                                <button class="qty-btn minus">-</button>
+                                <input type="text" class="qty-input" value="1" readonly>
+                                <button class="qty-btn plus">+</button>
+                            </div>
+                            <button class="add-to-cart" data-id="${product.id}">कार्ट में जोड़ें</button>
+                        </div>
+                    </div>
+                `;
+
+                const plusBtn = productCard.querySelector('.plus');
+                const minusBtn = productCard.querySelector('.minus');
+                const qtyInput = productCard.querySelector('.qty-input');
+
+                plusBtn.addEventListener('click', function() {
+                    qtyInput.value = parseInt(qtyInput.value) + 1;
+                });
+
+                minusBtn.addEventListener('click', function() {
+                    if (parseInt(qtyInput.value) > 1) {
+                        qtyInput.value = parseInt(qtyInput.value) - 1;
+                    }
+                });
+
+                const addToCartBtn = productCard.querySelector('.add-to-cart');
+                addToCartBtn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    const quantity = parseInt(qtyInput.value);
+                    addToCart(id, quantity);
+
+                    const confirmation = document.createElement('div');
+                    confirmation.textContent = 'कार्ट में जोड़ा गया!';
+                    confirmation.style.position = 'fixed';
+                    confirmation.style.bottom = '20px';
+                    confirmation.style.right = '20px';
+                    confirmation.style.background = '#00b894';
+                    confirmation.style.color = 'white';
+                    confirmation.style.padding = '10px 20px';
+                    confirmation.style.borderRadius = '5px';
+                    confirmation.style.zIndex = '1000';
+                    document.body.appendChild(confirmation);
+
+                    setTimeout(() => {
+                        document.body.removeChild(confirmation);
+                    }, 2000);
+                });
+
+                const productImageElem = productCard.querySelector('.product-image');
+                productImageElem.addEventListener('click', function() {
+                    openImageModal(product.images, product.name);
+                });
+
+                return productCard;
+            }
 
     function renderProducts(){
         const prodGrid = document.querySelector('#products .products-grid');
@@ -574,4 +614,5 @@ navLinks.forEach(l => {
     updateCartCount();
 
 });
+
 
