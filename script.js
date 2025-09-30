@@ -605,6 +605,55 @@ navLinks.forEach(l => {
                     document.getElementById(tabId).classList.add('active');
                 });
             });			
+
+
+// Image Modal functionality
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const imageGallery = document.getElementById('imageGallery');
+            const closeBtn = document.querySelector('.close');
+
+            function openImageModal(images, title) {
+                modal.style.display = 'block';
+
+                if (images && images.length > 0) {
+                    modalImg.src = images[0];
+                    modalImg.alt = title;
+                } else {
+                    modalImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjMwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiNjY2MiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZXMgQXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg==';
+                    modalImg.alt = 'No images available';
+                }
+
+                imageGallery.innerHTML = '';
+
+                if (images && images.length > 0) {
+                    images.forEach((image, index) => {
+                        const thumbnail = document.createElement('img');
+                        thumbnail.src = image;
+                        thumbnail.alt = `${title} ${index + 1}`;
+                        thumbnail.className = 'thumbnail';
+                        if (index === 0) thumbnail.classList.add('active');
+
+                        thumbnail.addEventListener('click', function() {
+                            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                            this.classList.add('active');
+                            modalImg.src = image;
+                        });
+
+                        imageGallery.appendChild(thumbnail);
+                    });
+                }
+            }
+
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
             
 
     // ==========================
@@ -614,5 +663,6 @@ navLinks.forEach(l => {
     updateCartCount();
 
 });
+
 
 
