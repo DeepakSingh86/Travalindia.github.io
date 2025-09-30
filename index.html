@@ -1,896 +1,15 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TravalIndiaGift Center</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
-        }
-
-        :root {
-            --primary: #6a11cb;
-            --secondary: #2575fc;
-            --accent: #ff6b6b;
-            --light: #f8f9fa;
-            --dark: #2d3436;
-            --success: #00b894;
-            --admin-bg: #f0f2f5;
-        }
-
-        body {
-            background-color: #f5f7fb;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .logo i {
-            font-size: 1.8rem;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 20px;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 5px 10px;
-            border-radius: 20px;
-            transition: background 0.3s;
-        }
-
-        nav a.active, nav a:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .cart-icon {
-            position: relative;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .cart-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--accent);
-            color: white;
-            font-size: 0.7rem;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .page {
-            display: none;
-            padding: 20px 0;
-            animation: fadeIn 0.5s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        .page-title {
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--dark);
-            font-size: 1.8rem;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .page-title:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 2px;
-        }
-
-        .admin-panel {
-            background: var(--admin-bg);
-            min-height: 100vh;
-            padding: 20px 0;
-        }
-
-        .admin-header {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .admin-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-warning {
-            background: #f39c12;
-            color: white;
-        }
-
-        .btn-info {
-            background: #3498db;
-            color: white;
-        }
-
-        .btn-primary:hover, .btn-danger:hover, .btn-success:hover, .btn-warning:hover, .btn-info:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .form-container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border 0.3s;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-
-        .image-url-inputs {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .btn-block {
-            width: 100%;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-            cursor: pointer;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-image {
-            height: 200px;
-            overflow: hidden;
-            position: relative;
-            background-color: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .product-card:hover .product-image img {
-            transform: scale(1.05);
-        }
-
-        .product-info {
-            padding: 15px;
-        }
-
-        .product-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--dark);
-        }
-
-        .product-price {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 12px;
-        }
-
-        .inr-symbol {
-            font-weight: 600;
-        }
-
-        .product-actions {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .qty-btn {
-            width: 30px;
-            height: 30px;
-            background: #f1f2f6;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .qty-input {
-            width: 40px;
-            height: 30px;
-            text-align: center;
-            border: none;
-            border-left: 1px solid #ddd;
-            border-right: 1px solid #ddd;
-        }
-
-        .add-to-cart {
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .add-to-cart:hover {
-            background: var(--secondary);
-        }
-
-        .admin-products {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 30px;
-        }
-
-        .product-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .product-table th, .product-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        .product-table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-
-        .product-table img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-
-        .cart-items {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .cart-item {
-            display: flex;
-            border-bottom: 1px solid #eee;
-            padding: 15px 0;
-        }
-
-        .cart-item-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-right: 15px;
-            background-color: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cart-item-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .cart-item-details {
-            flex: 1;
-        }
-
-        .cart-item-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .cart-item-price {
-            color: var(--primary);
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .cart-item-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .remove-item {
-            color: var(--accent);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .cart-total {
-            text-align: right;
-            margin-top: 20px;
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .checkout-btn {
-            margin-top: 20px;
-            background: var(--success);
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .checkout-btn:hover {
-            background: #00a382;
-        }
-
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 30px 0;
-            margin-top: 50px;
-        }
-
-        .footer-content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        .footer-section {
-            flex: 1;
-            min-width: 250px;
-            margin-bottom: 20px;
-        }
-
-        .footer-section h3 {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-section h3:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: var(--primary);
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 8px;
-        }
-
-        .footer-links a {
-            color: #ddd;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .social-links a {
-            color: white;
-            font-size: 1.5rem;
-            transition: color 0.3s;
-        }
-
-        .social-links a:hover {
-            color: var(--primary);
-        }
-
-        .copyright {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #4b6584;
-        }
-
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 80vh;
-        }
-
-        .login-form {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .login-title {
-            text-align: center;
-            margin-bottom: 20px;
-            color: var(--dark);
-        }
-
-        .login-error {
-            color: var(--accent);
-            text-align: center;
-            margin-top: 10px;
-            display: none;
-        }
-
-        .data-management {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .data-actions {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .file-label {
-            display: inline-block;
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .file-label:hover {
-            background: var(--secondary);
-        }
-
-        .csv-template {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            font-size: 0.9rem;
-        }
-
-        .csv-template h4 {
-            margin-bottom: 10px;
-            color: var(--dark);
-        }
-
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            nav ul {
-                gap: 10px;
-            }
-
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-
-            .footer-section {
-                min-width: 100%;
-            }
-
-            .admin-header {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .product-table {
-                display: block;
-                overflow-x: auto;
-            }
-
-            .admin-actions {
-                justify-content: center;
-            }
-
-            .data-actions {
-                flex-direction: column;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo h1 {
-                font-size: 1.3rem;
-            }
-
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .page-title {
-                font-size: 1.5rem;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cart-item {
-                flex-direction: column;
-            }
-
-            .cart-item-image {
-                width: 100%;
-                height: 150px;
-                margin-right: 0;
-                margin-bottom: 15px;
-            }
-        }
-
-        .currency-note {
-            text-align: center;
-            margin: 10px 0;
-            color: var(--primary);
-            font-weight: 500;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            overflow: auto;
-        }
-
-        .modal-content {
-            position: relative;
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 700px;
-            margin-top: 50px;
-            animation: zoom 0.6s;
-        }
-
-        @keyframes zoom {
-            from {transform: scale(0)}
-            to {transform: scale(1)}
-        }
-
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .image-gallery {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-
-        .thumbnail {
-            width: 80px;
-            height: 80px;
-            cursor: pointer;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-        }
-
-        .thumbnail:hover {
-            opacity: 1;
-        }
-
-        .thumbnail.active {
-            opacity: 1;
-            border: 2px solid white;
-        }
-
-        .external-links {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .external-links a {
-            display: inline-block;
-            margin: 0 10px;
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        .external-links a:hover {
-            background: var(--secondary);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #777;
-        }
-
-        .empty-state i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            color: #ddd;
-        }
-
-        .empty-state h3 {
-            margin-bottom: 10px;
-            color: #555;
-        }
-
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-        }
-
-        .tab.active {
-            border-bottom: 3px solid var(--primary);
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .status-message {
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            display: none;
-        }
-
-        .status-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .status-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 2s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .image-loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin: 10px 0;
-            flex-direction: column;
-        }
-
-        .github-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border-left: 4px solid var(--primary);
-        }
-
-        .github-info h4 {
-            margin-bottom: 10px;
-            color: var(--dark);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TravalIndia Gift Center Gurugram</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script defer src="script.js"></script>
 </head>
+<body>
+  </head>
 <body>
     <!-- Public Shopping Page -->
     <div id="public-page">
@@ -903,10 +22,10 @@
                     </div>
                     <nav>
                         <ul>
-                            <li><a href="#" class="nav-link active" data-page="home">होम</a></li>
-                            <li><a href="#" class="nav-link" data-page="products">उत्पाद</a></li>
-                            <li><a href="#" class="nav-link" data-page="cart">कार्ट</a></li>
-                            <li><a href="#" id="admin-link">एडमिन</a></li>
+                            <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                            <li><a href="#" class="nav-link" data-page="products">Products</a></li>
+                            <li><a href="#" class="nav-link" data-page="cart">Cart</a></li>
+                            <li><a href="#" id="admin-link">Admin</a></li>
                         </ul>
                     </nav>
                     <div class="cart-icon">
@@ -919,54 +38,54 @@
 
         <main class="container">
             <section id="home" class="page active">
-                <h2 class="page-title">TravalIndiaGift Center Gurugaram में आपका स्वागत है</h2>
-                <div class="currency-note">सभी कीमतें भारतीय रुपये (₹) में</div>
+                <h2 class="page-title">Welcome to TravelIndiaGift Center Gurugram</h2>
+                <div class="currency-note">All prices in Indian Rupees (₹)</div>
                 <div class="form-container">
-                    <p>TravalIndiaGift Center में सभी अवसरों के लिए उपहार ढूंढें। हम हर स्वाद और बजट के लिए उत्पादों की विस्तृत श्रृंखला प्रदान करते हैं।</p>
-                    <p>हमारे संग्रह का अन्वेषण करें, नए आइटम जोड़ें और अपनी शॉपिंग कार्ट को आसानी से प्रबंधित करें।</p>
+                    <p>Find gifts for all occasions at TravelIndia Gift Center. We offer a wide range of products for every taste and budget.</p>
+                    <p>Explore our collection, add new items and manage your shopping cart with ease.</p>
                     <div style="text-align: center; margin-top: 20px;">
-                        <button class="btn btn-primary" id="explore-btn">उत्पाद देखें</button>
+                        <button class="btn btn-primary" id="explore-btn">View products</button>
                     </div>
                 </div>
 
-                <h3 style="margin: 30px 0 20px; text-align: center;">फीचर्ड उत्पाद</h3>
+                <h3 style="margin: 30px 0 20px; text-align: center;">Featured Products</h3>
                 <div class="products-grid" id="featured-products">
                     <div class="empty-state">
                         <i class="fas fa-box-open"></i>
-                        <h3>कोई उत्पाद उपलब्ध नहीं</h3>
-                        <p>एडमिन द्वारा उत्पाद जोड़े जाने पर यहां दिखाई देंगे</p>
+                        <h3>कNo products available</h3>
+                        <p>Products added by admin will appear here</p>
                     </div>
                 </div>
 
             </section>
 
             <section id="products" class="page">
-                <h2 class="page-title">हमारे उत्पाद</h2>
-                <div class="currency-note">सभी कीमतें भारतीय रुपये (₹) में</div>
+                <h2 class="page-title">Our Products</h2>
+                <div class="currency-note">All prices in Indian Rupees (₹)</div>
                 <div class="products-grid" id="all-products">
                     <div class="empty-state">
                         <i class="fas fa-box-open"></i>
-                        <h3>कोई उत्पाद उपलब्ध नहीं</h3>
-                        <p>एडमिन द्वारा उत्पाद जोड़े जाने पर यहां दिखाई देंगे</p>
+                        <h3>No products available</h3>
+                        <p>Products added by admin will appear here</p>
                     </div>
                 </div>
             </section>
 
             <section id="cart" class="page">
-                <h2 class="page-title">आपकी शॉपिंग कार्ट</h2>
-                <div class="currency-note">सभी कीमतें भारतीय रुपये (₹) में</div>
+                <h2 class="page-title">Your Shopping Cart</h2>
+                <div class="currency-note">All prices in Indian Rupees (₹)</div>
                 <div class="cart-items">
                     <div class="empty-cart-message" style="text-align: center; padding: 30px;">
                         <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #ddd; margin-bottom: 15px;"></i>
-                        <h3>आपकी कार्ट खाली है</h3>
-                        <p>अपनी कार्ट में कुछ उत्पाद जोड़ें</p>
+                        <h3>Your cart is empty</h3>
+                        <p>Add some products to your cartं</p>
                     </div>
                 </div>
                 <div class="cart-total">
-                    कुल: ₹<span id="cartTotal">0.00</span>
+      Total ₹<span id="cartTotal">0.00</span>
                 </div>
                 <div style="text-align: right;">
-                    <button class="checkout-btn">चेकआउट करें</button>
+                    <button class="checkout-btn">Checkout</button>
                 </div>
             </section>
         </main>
@@ -982,20 +101,20 @@
                 <div class="footer-content">
                     <div class="footer-section">
                         <h3>TravalIndiaGift Center</h3>
-                        <p>सभी उपहार आइटमों और विशेष अवसरों के लिए उपहारों के लिए आपकी एकमात्र पसंद।</p>
+                        <p>Your one-stop choice for all gift items and special occasion gifts.</p>
                     </div>
                     <div class="footer-section">
-                        <h3>त्वरित लिंक</h3>
+                        <h3>Quick Links</h3>
                         <ul class="footer-links">
-                            <li><a href="#" class="footer-nav" data-page="home">होम</a></li>
-                            <li><a href="#" class="footer-nav" data-page="products">उत्पाद</a></li>
-                            <li><a href="#" class="footer-nav" data-page="cart">कार्ट</a></li>
-                            <li><a href="#" id="footer-admin-link">एडमिन</a></li>
+                            <li><a href="#" class="footer-nav" data-page="home">Home</a></li>
+                            <li><a href="#" class="footer-nav" data-page="products">Product</a></li>
+                            <li><a href="#" class="footer-nav" data-page="cart">Cart</a></li>
+                            <li><a href="#" id="footer-admin-link">Admin</a></li>
                         </ul>
                     </div>
                     <div class="footer-section">
-                        <h3>संपर्क करें</h3>
-                        <p><i class="fas fa-map-marker-alt"></i> सेक्टर 05, गुरुग्राम, भारत</p>
+                        <h3>Contact Us</h3>
+                        <p><i class="fas fa-map-marker-alt"></i>Sector 05, Gurugram, India</p>
                         <p><i class="fas fa-phone"></i> +91 12412732</p>
                         <p><i class="fas fa-envelope"></i> info@Travalindiagift@gmail.com</p>
                         <div class="social-links">
@@ -1007,8 +126,8 @@
                     </div>
                 </div>
                 <div class="copyright">
-                    <p>&copy; 2025 TravalIndiaGift Center Gurugaram. सर्वाधिकार सुरक्षित।</p>
-                    <!-- <p>GitHub Repository: <a href="https://github.com/DeepakSingh86/Travalindia.github.ioo" style="color: #6a11cb;">https://github.com/DeepakSingh86/Travalindia.github.io</a></p> -->
+                    <p>&copy; 2025 TravelIndiaGift Center Gurugram. All rights reserved.</p>
+                    <!-- <p>GitHub Repository: <a href="https://github.com/Urvashimahawar/urvashi.github.io" style="color: #6a11cb;">https://github.com/Urvashimahawar/urvashi.github.io</a></p>-->
                 </div>
             </div>
         </footer>
@@ -1019,13 +138,13 @@
         <div class="container">
             <div id="admin-login" class="login-container">
                 <div class="login-form">
-                    <h2 class="login-title">एडमिन लॉगिन</h2>
+                    <h2 class="login-title">Admin Login</h2>
                     <div class="form-group">
-                        <label for="admin-password">पासवर्ड</label>
-                        <input type="password" id="admin-password" class="form-control" placeholder="एडमिन पासवर्ड दर्ज करें">
+                        <label for="admin-password">Password</label>
+                        <input type="password" id="admin-password" class="form-control" placeholder="Enter the admin password">
                     </div>
-                    <button class="btn btn-primary btn-block" id="login-btn">लॉगिन</button>
-                    <div id="login-error" class="login-error">गलत पासवर्ड। कृपया पुनः प्रयास करें।</div>
+                    <button class="btn btn-primary btn-block" id="login-btn">Login</button>
+                    <div id="login-error" class="login-error">Incorrect password. Please try again.</div>
                 </div>
             </div>
 
@@ -1033,35 +152,35 @@
                 <div class="admin-header">
                     <div class="logo">
                         <i class="fas fa-gift"></i>
-                        <h1>TravalIndiaGift Center - एडमिन पैनल</h1>
+                        <h1>TravelIndiaGift Center - Admin Panel</h1>
                     </div>
                     <div class="admin-actions">
-                        <button class="btn btn-success" id="export-csv">CSV एक्सपोर्ट</button>
-                        <button class="btn btn-warning" id="import-csv">CSV इम्पोर्ट</button>
-                        <button class="btn btn-primary" id="save-to-github">GitHub से लोड करें</button>
-                        <button class="btn" id="back-to-store">स्टोर पर वापस</button>
-                        <button class="btn btn-danger" id="logout-btn">लॉगआउट</button>
+                        <button class="btn btn-success" id="export-csv">CSV Export</button>
+                        <button class="btn btn-warning" id="import-csv">CSV Import</button>
+                        <button class="btn btn-primary" id="save-to-github">Load from GitHub</button>
+                        <button class="btn" id="back-to-store">Back to the store</button>
+                        <button class="btn btn-danger" id="logout-btn">Logout</button>
                     </div>
                 </div>
 
                 <div class="tabs">
-                    <div class="tab active" data-tab="data-management">डेटा प्रबंधन</div>
-                    <div class="tab" data-tab="add-product">उत्पाद जोड़ें</div>
-                    <div class="tab" data-tab="manage-products">उत्पाद प्रबंधन</div>
+                    <div class="tab active" data-tab="data-management">Data Management</div>
+                    <div class="tab" data-tab="add-product">Add Product</div>
+                    <div class="tab" data-tab="manage-products">Manage Products</div>
                 </div>
 
                 <div class="tab-content active" id="data-management">
                     <div class="data-management">
-                        <h2 class="page-title">डेटा प्रबंधन</h2>
-                        <p>CSV फ़ाइलों से उत्पाद डेटा आयात करें या GitHub से सीधे लोड करें।</p>
+                        <h2 class="page-title">Data Management</h2>
+                        <p>Import product data from CSV files or load directly from GitHub.</p>
 
                         <div class="github-info">
-                            <h4>GitHub से Images लोड करने के लिए:</h4>
-                            <p>आपके GitHub repository में images/ folder में उत्पाद images और CSV files हैं।</p>
-                            <p>CSV फ़ाइल में image URLs इस फॉर्मेट में हों:</p>
+                            <h4>To load images from GitHub:</h4>
+                            <p>The images/ folder in your GitHub repository contains product images and CSV files.</p>
+                            <p>The CSV file should contain image URLs in the following format:</p>
                             <ul>
-                                <li><strong>पूर्ण GitHub URL:</strong> https://raw.githubusercontent.com/DeepakSingh86/Travalindia.github.io/main/images/image14.jpg</li>
-                                <li><strong>रिलेटिव पाथ:</strong> image-14.jpg (सिर्फ फ़ाइल नाम)</li>
+                                <li><strong>Full GitHub URL:</strong> https://raw.githubusercontent.com/Urvashimahawar/urvashi.github.io/main/images/earrings1.jpg</li>
+                                <li><strong>रिलेटिव पाथ:</strong> earrings1.jpg (सिर्फ फ़ाइल नाम)</li>
                             </ul>
                         </div>
 
@@ -1080,8 +199,8 @@
                             <p><strong>productId, productName, quantity, price, imageUrl1, imageUrl2, imageUrl3</strong></p>
                             <p>उदाहरण:</p>
                             <pre>
-P001,सुंदर झुमके साइज-1,50,599.99,Image14.jpg,
-<!-- P002,सुंदर झुमके साइज-2,30,149.50,https://raw.githubusercontent.com/DeepakSingh86/Travalindia.github.io/main/images/earrings4.jpg,earrings5.jpg,earrings6.jpg -->
+P001,सुंदर झुमके साइज-1,50,599.99,earrings1.jpg,earrings2.jpg,earrings3.jpg
+P002,सुंदर झुमके साइज-2,30,149.50,https://raw.githubusercontent.com/Urvashimahawar/urvashi.github.io/main/images/earrings4.jpg,earrings5.jpg,earrings6.jpg
                             </pre>
                         </div>
 
@@ -1115,11 +234,11 @@ P001,सुंदर झुमके साइज-1,50,599.99,Image14.jpg,
                         <div class="form-group">
                             <label>Image URLs (GitHub से)</label>
                             <div class="image-url-inputs">
-                                <input type="text" id="imageUrl1" class="form-control" placeholder="Image 1 URL (image-14.jpg या पूर्ण URL)">
+                                <input type="text" id="imageUrl1" class="form-control" placeholder="Image 1 URL (earrings1.jpg या पूर्ण URL)">
                                 <input type="text" id="imageUrl2" class="form-control" placeholder="Image 2 URL">
                                 <input type="text" id="imageUrl3" class="form-control" placeholder="Image 3 URL">
                             </div>
-                            <small>आप रिलेटिव पाथ (जैसे image-14.jpg) या पूर्ण GitHub URL डाल सकते हैं</small>
+                            <small>आप रिलेटिव पाथ (जैसे earrings1.jpg) या पूर्ण GitHub URL डाल सकते हैं</small>
                         </div>
                         <button class="btn btn-primary btn-block" id="addItemBtn">उत्पाद जोड़ें</button>
                     </div>
@@ -1152,170 +271,5 @@ P001,सुंदर झुमके साइज-1,50,599.99,Image14.jpg,
             </div>
         </div>
     </div>
-  <script>
-document.addEventListener('DOMContentLoaded', async function() {
-
-    // ===============================
-    // Global Config
-    // ===============================
-    const ADMIN_PASSWORD = "admin123"; // Admin password
-    const GITHUB_REPO = "DeepakSingh86/Travalindia.github.io";
-    const GITHUB_BRANCH = "main";
-    const GITHUB_IMAGE_FOLDER = "images";
-    const GITHUB_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_IMAGE_FOLDER}/`;
-
-    // Local storage init
-    let products = JSON.parse(localStorage.getItem('TravalindiaProducts')) || [];
-    let cart = JSON.parse(localStorage.getItem('TravalindiaCart')) || [];
-
-    // ===============================
-    // Helpers
-    // ===============================
-    function formatINR(amount) {
-        return new Intl.NumberFormat('en-IN', {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2
-        }).format(amount);
-    }
-
-    function saveProducts() {
-        localStorage.setItem('TravalindiaProducts', JSON.stringify(products));
-    }
-
-    function saveCart() {
-        localStorage.setItem('TravalindiaCart', JSON.stringify(cart));
-    }
-
-    // Convert image URL to GitHub raw URL
-    function convertToGitHubUrl(url) {
-        if (!url) return '';
-        if (url.startsWith('http')) {
-            if (url.includes('github.com') && url.includes('/blob/')) {
-                return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
-            }
-            return url;
-        }
-        return GITHUB_BASE_URL + url;
-    }
-
-    // ===============================
-    // CSV Handling
-    // ===============================
-    async function loadCSVFromGitHub(csvFileName) {
-        const csvUrl = `${GITHUB_BASE_URL}${csvFileName}`;
-        try {
-            const response = await fetch(csvUrl);
-            if (!response.ok) throw new Error('CSV फ़ाइल लोड नहीं हो सकी');
-            return await response.text();
-        } catch (error) {
-            console.error('Error loading CSV:', error);
-            return null;
-        }
-    }
-
-    async function getAvailableCSVFiles() {
-        const possibleFiles = ['products.csv', 'sample-products.csv', 'Travalindia-products.csv'];
-        const availableFiles = [];
-        for (const fileName of possibleFiles) {
-            try {
-                const response = await fetch(`${GITHUB_BASE_URL}${fileName}`);
-                if (response.ok) availableFiles.push(fileName);
-            } catch {}
-        }
-        return availableFiles;
-    }
-
-    // ===============================
-    // Navigation
-    // ===============================
-    const navLinks = document.querySelectorAll('.nav-link');
-    const footerNavLinks = document.querySelectorAll('.footer-nav');
-    const pages = document.querySelectorAll('.page');
-    const adminLink = document.getElementById('admin-link');
-    const footerAdminLink = document.getElementById('footer-admin-link');
-    const backToStoreBtn = document.getElementById('back-to-store');
-    const publicPage = document.getElementById('public-page');
-    const adminPage = document.getElementById('admin-page');
-
-    function navigateTo(pageId) {
-        navLinks.forEach(navLink => navLink.classList.remove('active'));
-        const activeLink = document.querySelector(`[data-page="${pageId}"]`);
-        if (activeLink) activeLink.classList.add('active');
-
-        pages.forEach(page => page.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-
-        if (pageId === 'products' || pageId === 'home') renderProducts();
-        if (pageId === 'cart') renderCart();
-    }
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            navigateTo(link.getAttribute('data-page'));
-        });
-    });
-
-    footerNavLinks.forEach(link => {
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            navigateTo(link.getAttribute('data-page'));
-        });
-    });
-
-    // ===============================
-    // Admin Login
-    // ===============================
-    const loginBtn = document.getElementById('login-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const adminLogin = document.getElementById('admin-login');
-    const adminPanelContent = document.getElementById('admin-panel-content');
-    const loginError = document.getElementById('login-error');
-
-    function showAdminLogin() {
-        publicPage.style.display = 'none';
-        adminPage.style.display = 'block';
-        adminLogin.style.display = 'flex';
-        adminPanelContent.style.display = 'none';
-        loginError.style.display = 'none';
-        document.getElementById('admin-password').value = '';
-    }
-
-    adminLink.addEventListener('click', e => { e.preventDefault(); showAdminLogin(); });
-    footerAdminLink.addEventListener('click', e => { e.preventDefault(); showAdminLogin(); });
-
-    loginBtn.addEventListener('click', () => {
-        const password = document.getElementById('admin-password').value;
-        if (password === ADMIN_PASSWORD) {
-            adminLogin.style.display = 'none';
-            adminPanelContent.style.display = 'block';
-            renderAdminProducts();
-        } else loginError.style.display = 'block';
-    });
-
-    logoutBtn.addEventListener('click', () => showAdminLogin());
-    backToStoreBtn.addEventListener('click', () => {
-        adminPage.style.display = 'none';
-        publicPage.style.display = 'block';
-        navigateTo('home');
-    });
-
-    // ===============================
-    // Cart / Product rendering etc...
-    // (Keep your existing renderProducts, renderAdminProducts, addToCart, renderCart etc. here without change)
-    // ===============================
-
-    // At the end – initialize
-    navigateTo('home');
-    updateCartCount();
-    renderProducts();
-
-});
-</script>
-
 </body>
 </html>
-
-
-
-
