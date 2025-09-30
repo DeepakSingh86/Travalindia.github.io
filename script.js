@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             const GITHUB_BRANCH = "main";
             const GITHUB_IMAGE_FOLDER = "images";
             const GITHUB_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_IMAGE_FOLDER}/`;
-
+            let products = [];
+            let cart = [];
             // Initialize products array
           //  let products = JSON.parse(localStorage.getItem('TravalindiaProducts')) || [];
 
@@ -796,3 +797,4 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
 
     
+
