@@ -313,20 +313,88 @@ navLinks.forEach(l => {
         updateCartCount();
     }
 
-    function renderCart() {
-    const container = document.getElementById('cart-items');
-    if (!container) return; // exit if element not found
-    container.innerHTML = '';
-    if(cart.length===0){
-        container.innerHTML = 'आपका कार्ट खाली है';
-        return;
-    }
-    cart.forEach(c=>{
-        const div = document.createElement('div');
-        div.textContent=`${c.name} - Qty: ${c.quantity} - ₹ ${formatINR(c.price*c.quantity)}`;
-        container.appendChild(div);
-    });
-}
+  function renderCart() {
+                const cartItems = document.querySelector('.cart-items');
+
+                if (cart.length === 0) {
+                    cartItems.innerHTML = `
+                        <div class="empty-cart-message" style="text-align: center; padding: 30px;">
+                            <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #ddd; margin-bottom: 15px;"></i>
+                            <h3>आपकी कार्ट खाली है</h3>
+                            <p>अपनी कार्ट में कुछ उत्पाद जोड़ें</p>
+                        </div>
+                    `;
+                    document.getElementById('cartTotal').textContent = '0.00';
+                    return;
+                }
+
+                cartItems.innerHTML = '';
+                let total = 0;
+
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="cart-item-image">
+                            <img src="${item.image}" alt="${item.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNDAiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiNjY2MiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWc8L3RleHQ+PC9zdmc+='">
+                        </div>
+                        <div class="cart-item-details">
+                            <h3 class="cart-item-title">${item.name}</h3>
+                            <div class="cart-item-price">₹ ${formatINR(item.price)} x ${item.quantity}</div>
+                            <div class="cart-item-actions">
+                                <div class="quantity-control">
+                                    <button class="qty-btn minus" data-id="${item.id}">-</button>
+                                    <input type="text" class="qty-input" value="${item.quantity}" readonly>
+                                    <button class="qty-btn plus" data-id="${item.id}">+</button>
+                                </div>
+                                <button class="remove-item" data-id="${item.id}">हटाएं</button>
+                            </div>
+                        </div>
+                    `;
+
+                    cartItems.appendChild(cartItem);
+
+                    const plusBtn = cartItem.querySelector('.plus');
+                    const minusBtn = cartItem.querySelector('.minus');
+                    const qtyInput = cartItem.querySelector('.qty-input');
+                    const removeBtn = cartItem.querySelector('.remove-item');
+
+                    plusBtn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        const item = cart.find(item => item.id === id);
+                        item.quantity += 1;
+                        qtyInput.value = item.quantity;
+                        renderCart();
+                        saveCart();
+                    });
+
+                    minusBtn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        const item = cart.find(item => item.id === id);
+
+                        if (item.quantity > 1) {
+                            item.quantity -= 1;
+                            qtyInput.value = item.quantity;
+                            renderCart();
+                            saveCart();
+                        }
+                    });
+
+                    removeBtn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        cart = cart.filter(item => item.id !== id);
+                        renderCart();
+                        updateCartCount();
+                        saveCart();
+                    });
+                });
+
+                document.getElementById('cartTotal').textContent = formatINR(total);
+            }
+
 
 
     function updateCartCount(){
@@ -663,6 +731,7 @@ navLinks.forEach(l => {
     updateCartCount();
 
 });
+
 
 
 
