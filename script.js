@@ -9,20 +9,20 @@ document.addEventListener('DOMContentLoaded', async function() {
             const GITHUB_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_IMAGE_FOLDER}/`;
 
             // Initialize products array
-            let products = JSON.parse(localStorage.getItem('TravalindiaProducts')) || [];
+          //  let products = JSON.parse(localStorage.getItem('TravalindiaProducts')) || [];
 
             // Format number as INR
-            function formatINR(amount) {
-                return new Intl.NumberFormat('en-IN', {
-                    maximumFractionDigits: 2,
-                    minimumFractionDigits: 2
-                }).format(amount);
-            }
+          //  function formatINR(amount) {
+           //     return new Intl.NumberFormat('en-IN', {
+           //         maximumFractionDigits: 2,
+          //          minimumFractionDigits: 2
+          //      }).format(amount);
+          //  }
 
             // Save products to localStorage
-            function saveProducts() {
-                localStorage.setItem('TravalindiaProducts', JSON.stringify(products));
-            }
+        //    function saveProducts() {
+        //        localStorage.setItem('TravalindiaProducts', JSON.stringify(products));
+          //  }
 
             // Function to convert image URL to GitHub raw URL
             function convertToGitHubUrl(url) {
@@ -794,4 +794,5 @@ document.addEventListener('DOMContentLoaded', async function() {
             updateCartCount();
             renderCart();
         });
+
     
