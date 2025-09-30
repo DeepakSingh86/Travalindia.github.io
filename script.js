@@ -459,7 +459,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
 
             // Cart functionality
-            let cart = JSON.parse(localStorage.getItem('TravalindiaCart')) || [];
+           // let cart = JSON.parse(localStorage.getItem('TravalindiaCart')) || [];
 
             function addToCart(productId, quantity) {
                 const product = products.find(p => p.id === productId);
@@ -797,4 +797,5 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
 
     
+
 
