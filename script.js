@@ -113,7 +113,7 @@ navLinks.forEach(l => {
     // CONFIG
     // ==========================
     const ADMIN_PASSWORD = 'admin123';
-	 const GITHUB_REPO = "Urvashimahawar/urvashi.github.io";
+	 const GITHUB_REPO = "DeepakSingh86/Travalindia.github.io";
     const GITHUB_BRANCH = "main";
     const GITHUB_IMAGE_FOLDER = "images";
     const GITHUB_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_IMAGE_FOLDER}/`;
@@ -574,3 +574,4 @@ navLinks.forEach(l => {
     updateCartCount();
 
 });
+
